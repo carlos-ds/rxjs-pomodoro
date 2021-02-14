@@ -1,38 +1,79 @@
 import { interval, fromEvent } from 'rxjs';
 import { takeUntil, map, takeWhile } from 'rxjs/operators';
 
-let startValueInMiliseconds = 25 * 60 * 1000;
+const focusTimeInMiliseconds = 1 * 60 * 1000;
+let remainingFocusTimeInMiliseconds = focusTimeInMiliseconds;
+
+const breakTimeInMiliseconds = 5 * 60 * 1000;
+let remainingBreakTimeInMiliseconds = breakTimeInMiliseconds;
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  document.getElementById('timer').textContent = formatInMinutesAndSeconds(startValueInMiliseconds);
+  setTimer(focusTimeInMiliseconds);
 });
 
 const startButton = document.getElementById('start');
 const stopButton = document.getElementById('stop');
+const breakButton = document.getElementById('break');
+const resetButton = document.getElementById('reset');
 
 const clickStop$ = fromEvent(stopButton, 'click');
 const clickStart$ = fromEvent(startButton, 'click');
+const clickBreak$ = fromEvent(breakButton, 'click');
+const clickReset$ = fromEvent(resetButton, 'click');
 
-const timerInterval$ = interval(1000).pipe(
-  map((x) => (startValueInMiliseconds -= 1000)),
+const focusTimerInterval$ = interval(1000).pipe(
+  map((x) => (remainingFocusTimeInMiliseconds -= 1000)),
   takeWhile((x) => x >= 0),
-  takeUntil(clickStop$)
+  takeUntil(clickStop$),
+  takeUntil(clickStart$),
+  takeUntil(clickBreak$)
+);
+
+const breakTimerInterval$ = interval(1000).pipe(
+  map((x) => (remainingBreakTimeInMiliseconds -= 1000)),
+  takeWhile((x) => x >= 0),
+  takeUntil(clickStop$),
+  takeUntil(clickStart$),
+  takeUntil(clickBreak$)
 );
 
 startButton.addEventListener('click', () => {
-  timerInterval$.subscribe({
-    next: (x) => (document.getElementById('timer').textContent = formatInMinutesAndSeconds(x)),
+  setTimer(focusTimeInMiliseconds);
+  const focusTimer$ = focusTimerInterval$.subscribe({
+    next: (x) => {
+      setTimer(x);
+      setTitle({ prefix: 'FOCUS - ', time: x });
+    },
     error: (error) => console.log('error: ', error),
-    complete: () => console.log('completed!'),
+    complete: () => {
+      setTimer(breakTimeInMiliseconds);
+      remainingFocusTimeInMiliseconds = focusTimeInMiliseconds;
+      console.log('focus stream completed');
+    },
   });
 });
 
-stopButton.addEventListener('click', () => {
-  console.log('stopped');
+breakButton.addEventListener('click', () => {
+  setTimer(breakTimeInMiliseconds);
+  const breakTimer$ = breakTimerInterval$.subscribe({
+    next: (x) => {
+      setTimer(x);
+      setTitle({ prefix: 'BREAK - ', time: x });
+    },
+    error: (error) => console.log('error: ', error),
+    complete: () => {
+      setTimer(breakTimeInMiliseconds), (remainingBreakTimeInMiliseconds = breakTimeInMiliseconds);
+      console.log('break stream completed');
+    },
+  });
 });
 
 function setTimer(timeInMiliseconds) {
   document.getElementById('timer').textContent = formatInMinutesAndSeconds(timeInMiliseconds);
+}
+
+function setTitle(value) {
+  document.title = value.prefix + formatInMinutesAndSeconds(value.time);
 }
 
 function formatInMinutesAndSeconds(timeInMiliseconds) {
