@@ -46,7 +46,6 @@ startButton.addEventListener('click', () => {
     },
     error: (error) => console.log('error: ', error),
     complete: () => {
-      setTimer(breakTimeInMiliseconds);
       remainingFocusTimeInMiliseconds = focusTimeInMiliseconds;
       console.log('focus stream completed');
     },
@@ -62,7 +61,7 @@ breakButton.addEventListener('click', () => {
     },
     error: (error) => console.log('error: ', error),
     complete: () => {
-      setTimer(breakTimeInMiliseconds), (remainingBreakTimeInMiliseconds = breakTimeInMiliseconds);
+      remainingBreakTimeInMiliseconds = breakTimeInMiliseconds;
       console.log('break stream completed');
     },
   });
