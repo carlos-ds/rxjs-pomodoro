@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   function setTimer(timer) {
     timeRemaining.textContent = formatInMinutesAndSeconds(timer.time);
-    document.title = `${timer.type} time - ${formatInMinutesAndSeconds(timer.time)} remaining`;
+    document.title = `${timer.type} time - ${formatInMinutesAndSeconds(timer.time)}`;
     document.querySelector('.header-text').textContent = timer.type.toUpperCase() + ' time';
   }
 });
