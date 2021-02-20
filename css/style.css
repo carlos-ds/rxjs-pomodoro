@@ -4,36 +4,69 @@ body {
 
 #grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 3fr, 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 2fr, 2fr, 1fr, 1fr;
   grid-template-areas:
-    'timer timer timer timer'
-    'start stop break reset';
-  row-gap: 2rem;
-  width: 90%;
+    'header header'
+    'timer timer'
+    'start focus'
+    'stop break';
+  gap: 1rem;
+  width: 100%;
 }
 
 .btn {
-  margin: 1rem;
-  border-radius: 0.5rem;
+  width: 60%;
+  display: inline-block;
+  padding: 0.3em 1.2em;
+  margin: auto;
+  border: 0.16em solid rgba(255, 255, 255, 0);
+  border-radius: 2rem;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #000000;
+  text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+  text-align: center;
+  transition: all 0.2s;
   text-transform: uppercase;
-  padding: 0.5rem 0;
-  letter-spacing: 2px;
 }
 
 .btn:hover {
   cursor: pointer;
+  border-color: rgba(0, 0, 0, 1);
+}
+
+.btn:active,
+.btn:focus {
+  outline: none;
+}
+
+header {
+  min-height: 100px;
+  grid-area: header;
+  margin: auto;
+  text-align: center;
+}
+
+.header-text {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 2rem;
+  text-transform: uppercase;
 }
 
 #timer {
-  margin-top: 2rem;
+  margin: auto;
+  min-height: 100px;
   grid-area: timer;
   text-align: center;
   font-size: 3rem;
 }
 
 #reset {
-  grid-area: reset;
+  grid-area: focus;
   background: #5bb9f0;
 }
 
