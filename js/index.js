@@ -5,6 +5,9 @@ import { takeUntil, map, takeWhile } from 'rxjs/operators';
 document.addEventListener('DOMContentLoaded', (event) => {
   const timeRemaining = document.getElementById('timer');
 
+  let timer = new Timer('focus', 25 * 60 * 1000);
+  setTimer(timer);
+
   const startButton = document.getElementById('start');
   const stopButton = document.getElementById('stop');
   const focusButton = document.getElementById('focus');
@@ -14,9 +17,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const clickFocus$ = fromEvent(focusButton, 'click');
   const clickBreak$ = fromEvent(breakButton, 'click');
   const clickStart = fromEvent(startButton, 'click');
-
-  let timer = new Timer('focus', 25 * 60 * 1000);
-  setTimer(timer);
 
   const startTimer$ = interval(1000).pipe(
     map((x) => (timer.time -= 1000)),
