@@ -27,14 +27,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
   );
 
   startButton.addEventListener('click', () => {
-    timer.start();
-    startTimer$.subscribe({
-      next: (value) => {
-        timeRemaining.textContent = formatInMinutesAndSeconds(value);
-        setTimer(timer);
-      },
-      error: (error) => console.log(error),
-    });
+    if (timer.state !== 'RUNNING') {
+      startTimer$.subscribe({
+        next: (value) => {
+          timeRemaining.textContent = formatInMinutesAndSeconds(value);
+          setTimer(timer);
+        },
+        error: (error) => console.log(error),
+        complete: () => timer.complete(),
+      });
+      timer.start();
+    }
   });
 
   stopButton.addEventListener('click', () => {
@@ -49,7 +52,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   breakButton.addEventListener('click', () => {
     timer = new Timer('break', 5 * 60 * 1000);
-
     setTimer(timer);
   });
 
