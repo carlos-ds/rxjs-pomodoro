@@ -84,3 +84,24 @@ header {
   grid-area: break;
   background: #f6ff8f;
 }
+
+@media only screen and (max-width: 900px) {
+  #grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr, 2fr, 1fr, 1fr;
+    grid-template-areas:
+      'header'
+      'timer'
+      'start'
+      'stop'
+      'focus'
+      'break';
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .btn {
+    width: 90%;
+  }
+}
