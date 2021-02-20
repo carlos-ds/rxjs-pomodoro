@@ -1,81 +1,66 @@
-import { interval, fromEvent } from 'rxjs';
+import Timer from './timer';
+import { fromEvent, interval } from 'rxjs';
 import { takeUntil, map, takeWhile } from 'rxjs/operators';
 
-const focusTimeInMiliseconds = 1 * 60 * 1000;
-let remainingFocusTimeInMiliseconds = focusTimeInMiliseconds;
-
-const breakTimeInMiliseconds = 5 * 60 * 1000;
-let remainingBreakTimeInMiliseconds = breakTimeInMiliseconds;
-
 document.addEventListener('DOMContentLoaded', (event) => {
-  setTimer(focusTimeInMiliseconds);
-});
+  const timeRemaining = document.getElementById('timer');
 
-const startButton = document.getElementById('start');
-const stopButton = document.getElementById('stop');
-const breakButton = document.getElementById('break');
-const resetButton = document.getElementById('reset');
+  const startButton = document.getElementById('start');
+  const stopButton = document.getElementById('stop');
+  const focusButton = document.getElementById('focus');
+  const breakButton = document.getElementById('break');
 
-const clickStop$ = fromEvent(stopButton, 'click');
-const clickStart$ = fromEvent(startButton, 'click');
-const clickBreak$ = fromEvent(breakButton, 'click');
-const clickReset$ = fromEvent(resetButton, 'click');
+  const clickStop$ = fromEvent(stopButton, 'click');
+  const clickFocus$ = fromEvent(focusButton, 'click');
+  const clickBreak$ = fromEvent(breakButton, 'click');
+  const clickStart = fromEvent(startButton, 'click');
 
-const focusTimerInterval$ = interval(1000).pipe(
-  map((x) => (remainingFocusTimeInMiliseconds -= 1000)),
-  takeWhile((x) => x >= 0),
-  takeUntil(clickStop$),
-  takeUntil(clickStart$),
-  takeUntil(clickBreak$)
-);
+  let timer = new Timer('focus', 25 * 60 * 1000);
+  setTimer(timer);
 
-const breakTimerInterval$ = interval(1000).pipe(
-  map((x) => (remainingBreakTimeInMiliseconds -= 1000)),
-  takeWhile((x) => x >= 0),
-  takeUntil(clickStop$),
-  takeUntil(clickStart$),
-  takeUntil(clickBreak$)
-);
+  const startTimer$ = interval(1000).pipe(
+    map((x) => (timer.time -= 1000)),
+    takeWhile((x) => x >= 0),
+    takeUntil(clickStop$),
+    takeUntil(clickFocus$),
+    takeUntil(clickBreak$)
+  );
 
-startButton.addEventListener('click', () => {
-  setTimer(focusTimeInMiliseconds);
-  const focusTimer$ = focusTimerInterval$.subscribe({
-    next: (x) => {
-      setTimer(x);
-      setTitle({ prefix: 'FOCUS - ', time: x });
-    },
-    error: (error) => console.log('error: ', error),
-    complete: () => {
-      remainingFocusTimeInMiliseconds = focusTimeInMiliseconds;
-      console.log('focus stream completed');
-    },
+  startButton.addEventListener('click', () => {
+    timer.start();
+    startTimer$.subscribe({
+      next: (value) => {
+        timeRemaining.textContent = formatInMinutesAndSeconds(value);
+        setTimer(timer);
+      },
+      error: (error) => console.log(error),
+    });
   });
-});
 
-breakButton.addEventListener('click', () => {
-  setTimer(breakTimeInMiliseconds);
-  const breakTimer$ = breakTimerInterval$.subscribe({
-    next: (x) => {
-      setTimer(x);
-      setTitle({ prefix: 'BREAK - ', time: x });
-    },
-    error: (error) => console.log('error: ', error),
-    complete: () => {
-      remainingBreakTimeInMiliseconds = breakTimeInMiliseconds;
-      console.log('break stream completed');
-    },
+  stopButton.addEventListener('click', () => {
+    timer.pause();
+    setTimer(timer);
   });
+
+  focusButton.addEventListener('click', () => {
+    timer = new Timer('focus', 25 * 60 * 1000);
+    setTimer(timer);
+  });
+
+  breakButton.addEventListener('click', () => {
+    timer = new Timer('break', 5 * 60 * 1000);
+
+    setTimer(timer);
+  });
+
+  function formatInMinutesAndSeconds(timeInMiliseconds) {
+    // mm:ss format
+    return new Date(timeInMiliseconds).toISOString().substr(14, 5);
+  }
+
+  function setTimer(timer) {
+    timeRemaining.textContent = formatInMinutesAndSeconds(timer.time);
+    document.title = `${timer.type} time - ${formatInMinutesAndSeconds(timer.time)} remaining`;
+    document.querySelector('.header-text').textContent = timer.type.toUpperCase() + ' time';
+  }
 });
-
-function setTimer(timeInMiliseconds) {
-  document.getElementById('timer').textContent = formatInMinutesAndSeconds(timeInMiliseconds);
-}
-
-function setTitle(value) {
-  document.title = value.prefix + formatInMinutesAndSeconds(value.time);
-}
-
-function formatInMinutesAndSeconds(timeInMiliseconds) {
-  // mm:ss format
-  return new Date(timeInMiliseconds).toISOString().substr(14, 5);
-}
