@@ -1,5 +1,5 @@
 import Timer from './timer';
-import { fromEvent, interval } from 'rxjs';
+import { merge, fromEvent, interval } from 'rxjs';
 import { takeUntil, map, takeWhile } from 'rxjs/operators';
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const clickBreak$ = fromEvent(breakButton, 'click');
   const clickStart = fromEvent(startButton, 'click');
 
+  const stopTimer$ = merge(clickBreak$, clickFocus$, clickStop$);
+
   const startTimer$ = interval(1000).pipe(
     map((x) => (timer.time -= 1000)),
     takeWhile((x) => x >= 0),
-    takeUntil(clickStop$),
-    takeUntil(clickFocus$),
-    takeUntil(clickBreak$)
+    takeUntil(stopTimer$)
   );
 
   startButton.addEventListener('click', () => {
