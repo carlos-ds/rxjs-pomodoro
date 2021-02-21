@@ -1,5 +1,15 @@
+@font-face {
+  font-family: 'Playfair';
+  src: url('../fonts/PlayfairDisplay.woff2') format('woff2'), url('../fonts/PlayfairDisplay.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  background: #fda7c4;
+  overflow: hidden;
 }
 
 #grid {
@@ -11,16 +21,17 @@ body {
     'timer timer'
     'start focus'
     'stop break';
-  gap: 1rem;
+  gap: 3rem;
   width: 100%;
+  padding: 5rem 0;
 }
 
 .btn {
   width: 60%;
   display: inline-block;
-  padding: 0.3em 1.2em;
+  padding: 0.4rem 1.6rem;
   margin: auto;
-  border: 0.16em solid rgba(255, 255, 255, 0);
+  border: 0.2rem solid rgba(255, 255, 255, 0);
   border-radius: 2rem;
   box-sizing: border-box;
   text-decoration: none;
@@ -37,6 +48,7 @@ body {
 .btn:hover {
   cursor: pointer;
   border-color: rgba(0, 0, 0, 1);
+  opacity: 0.9;
 }
 
 .btn:active,
@@ -52,7 +64,10 @@ header {
 }
 
 .header-text {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Playfair;
+  font-weight: 600;
+  opacity: 0.9;
+  letter-spacing: 0.3rem;
   font-size: 2rem;
   text-transform: uppercase;
 }
@@ -65,9 +80,9 @@ header {
   font-size: 3rem;
 }
 
-#reset {
+#focus {
   grid-area: focus;
-  background: #5bb9f0;
+  background: #4cb8af;
 }
 
 #start {
