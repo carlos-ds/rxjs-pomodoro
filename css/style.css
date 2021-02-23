@@ -57,6 +57,17 @@ body {
   outline: none;
 }
 
+.btn[disabled] {
+  background: repeating-linear-gradient(45deg, #aaaaaa, #aaaaaa 10px, #cccccc 10px, #cccccc 20px);
+  opacity: 1;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.btn[disabled]:hover {
+  box-shadow: 1rem 0;
+}
+
 header {
   min-height: 100px;
   grid-area: header;
@@ -81,22 +92,22 @@ header {
   font-size: 3rem;
 }
 
-#focus {
+.btn--action-focus {
   grid-area: focus;
   background: #4cb8af;
 }
 
-#start {
+.btn--action-start {
   grid-area: start;
   background: #59f766;
 }
 
-#stop {
+.btn--action-stop {
   grid-area: stop;
   background: #ed3330;
 }
 
-#break {
+.btn--action-break {
   grid-area: break;
   background: #f6ff8f;
 }

@@ -8,10 +8,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let timer = new Timer('focus', 25 * 60 * 1000);
   setTimer(timer);
 
-  const startButton = document.getElementById('start');
-  const stopButton = document.getElementById('stop');
-  const focusButton = document.getElementById('focus');
-  const breakButton = document.getElementById('break');
+  const startButton = document.querySelector('.btn--action-start');
+  const stopButton = document.querySelector('.btn--action-stop');
+  const focusButton = document.querySelector('.btn--action-focus');
+  const breakButton = document.querySelector('.btn--action-break');
+
+  const buttons = [startButton, stopButton, focusButton, breakButton];
 
   const clickStop$ = fromEvent(stopButton, 'click');
   const clickFocus$ = fromEvent(focusButton, 'click');
@@ -37,22 +39,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
         complete: () => timer.complete(),
       });
       timer.start();
+      enable(buttons);
+      disable(startButton);
     }
   });
 
   stopButton.addEventListener('click', () => {
     timer.pause();
-    setTimer(timer);
+    enable(buttons);
+    disable(stopButton);
   });
 
   focusButton.addEventListener('click', () => {
     timer = new Timer('focus', 25 * 60 * 1000);
     setTimer(timer);
+    enable(buttons);
+    disable(focusButton);
   });
 
   breakButton.addEventListener('click', () => {
     timer = new Timer('break', 5 * 60 * 1000);
     setTimer(timer);
+    enable(buttons);
+    disable(breakButton);
   });
 
   function formatInMinutesAndSeconds(timeInMiliseconds) {
@@ -64,5 +73,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     timeRemaining.textContent = formatInMinutesAndSeconds(timer.time);
     document.title = `${timer.type} time - ${formatInMinutesAndSeconds(timer.time)}`;
     document.querySelector('.header-text').textContent = timer.type.toUpperCase() + ' time';
+  }
+
+  function disable(button) {
+    button.setAttribute('disabled', '');
+  }
+
+  function enable(buttons) {
+    buttons.forEach((button) => button.removeAttribute('disabled'));
   }
 });
