@@ -8,26 +8,30 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   height: 100vh;
-  background: #fda7c4;
   overflow: hidden;
+  background-color: #8bc6ec;
+  background-image: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);
 }
 
 #grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   grid-template-rows: 2fr, 2fr, 1fr, 1fr;
   grid-template-areas:
-    'header header'
-    'timer timer'
-    'start focus'
-    'stop break';
+    'header'
+    'timer'
+    'start'
+    'stop'
+    'focus'
+    'break';
   gap: 3rem;
   width: 100%;
   padding: 5rem 0;
+  align-content: center;
 }
 
 .btn {
-  width: 60%;
+  width: 30%;
   display: inline-block;
   padding: 0.4rem 1.6rem;
   margin: auto;
@@ -99,7 +103,7 @@ header {
 
 .btn--action-start {
   grid-area: start;
-  background: #59f766;
+  background: #9ff8a6;
 }
 
 .btn--action-stop {
@@ -117,13 +121,6 @@ header {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 2fr, 2fr, 1fr, 1fr;
-    grid-template-areas:
-      'header'
-      'timer'
-      'start'
-      'stop'
-      'focus'
-      'break';
     gap: 1rem;
     width: 100%;
   }
