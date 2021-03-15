@@ -8,9 +8,8 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   height: 100vh;
-  overflow: hidden;
+  overflow: scroll;
   background-color: #8bc6ec;
-  background-image: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);
 }
 
 #grid {
@@ -18,6 +17,7 @@ body {
   grid-template-columns: 1fr;
   grid-template-rows: 2fr, 2fr, 1fr, 1fr;
   grid-template-areas:
+    'settings'
     'header'
     'timer'
     'start'
@@ -70,6 +70,27 @@ body {
 
 .btn[disabled]:hover {
   box-shadow: 1rem 0;
+}
+
+#settings {
+  grid-area: settings;
+  margin: auto;
+  font-size: 1.5rem;
+}
+
+#settings input {
+  background: #dddddd;
+  border: none;
+  border-radius: 20px;
+  padding: 1rem 0;
+  width: 5rem;
+  margin-left: 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+#settings input:focus {
+  outline: thin dotted;
 }
 
 header {
