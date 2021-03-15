@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const focusButton = document.querySelector('.btn--action-focus');
   const breakButton = document.querySelector('.btn--action-break');
 
+  disable(stopButton);
+
   const buttons = [startButton, stopButton, focusButton, breakButton];
 
   const clickStop$ = fromEvent(stopButton, 'click');
