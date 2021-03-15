@@ -9,8 +9,18 @@
   </head>
   <body>
     <div id="grid">
+      <div id="settings">
+        <div>
+          <label for="focus">Focus time (in minutes):</label>
+          <input type="text" name="focus" maxlength="3" />
+        </div>
+        <div style="margin-top: 1rem">
+          <label for="focus">Break time (in minutes):</label>
+          <input type="text" name="break" maxlength="3" />
+        </div>
+      </div>
       <header>
-        <h2 class="header-text">Focus time</h2>
+        <h2 class="header-text"></h2>
       </header>
       <div id="timer"></div>
       <button class="btn btn--action-start">Start timer</button>
