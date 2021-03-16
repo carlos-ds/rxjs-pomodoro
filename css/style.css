@@ -26,7 +26,7 @@ body {
     'break';
   gap: 3rem;
   width: 100%;
-  padding: 5rem 0;
+  padding: 0 0 5rem 0;
   align-content: center;
 }
 
@@ -84,6 +84,7 @@ body {
   border-radius: 20px;
   padding: 1rem 0;
   width: 5rem;
+  margin-top: 1rem;
   margin-left: 2rem;
   font-size: 1.5rem;
   text-align: center;
@@ -91,6 +92,11 @@ body {
 
 #settings input:focus {
   outline: thin dotted;
+}
+
+.time-input {
+  margin-top: 3rem;
+  text-align: center;
 }
 
 header {
@@ -144,6 +150,11 @@ header {
     grid-template-rows: 2fr, 2fr, 1fr, 1fr;
     gap: 1rem;
     width: 100%;
+  }
+
+  #settings input {
+    display: block;
+    margin: 2rem auto;
   }
 
   .btn {

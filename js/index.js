@@ -2,6 +2,9 @@ import Timer from './timer';
 import { merge, fromEvent, interval } from 'rxjs';
 import { takeUntil, map, takeWhile } from 'rxjs/operators';
 
+const DEFAULT_FOCUS_TIME = 25;
+const DEFAULT_BREAK_TIME = 5;
+
 document.addEventListener('DOMContentLoaded', (event) => {
   const timeRemaining = document.getElementById('timer');
 
@@ -11,20 +14,47 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const breakButton = document.querySelector('.btn--action-break');
   const buttons = [startButton, stopButton, focusButton, breakButton];
 
+  const focusTimeInput = document.querySelector("input[name='focus']");
+  const breakTimeInput = document.querySelector("input[name='break']");
+  focusTimeInput.value = DEFAULT_FOCUS_TIME.toString();
+  breakTimeInput.value = DEFAULT_BREAK_TIME.toString();
+
   const clickStop$ = fromEvent(stopButton, 'click');
   const clickFocus$ = fromEvent(focusButton, 'click');
   const clickBreak$ = fromEvent(breakButton, 'click');
   const clickStart = fromEvent(startButton, 'click');
   const stopTimer$ = merge(clickBreak$, clickFocus$, clickStop$);
 
-  const focusTimeInput = document.querySelector("input[name='focus']");
-  const breakTimeInput = document.querySelector("input[name='break']");
-  focusTimeInput.value = '25';
-  breakTimeInput.value = '5';
+  const changeFocusTime$ = fromEvent(focusTimeInput, 'keyup');
+  const changeBreakTime$ = fromEvent(breakTimeInput, 'keyup');
 
   let timer = new Timer('focus', getFocusTime() * 60 * 1000);
   setTimer(timer);
   disable(stopButton);
+
+  changeFocusTime$.subscribe({
+    next: (event) => {
+      if (timer.state !== 'RUNNING' && timer.type === 'focus') {
+        const newFocusTime = parseInt(event.target.value, 10);
+        timer = new Timer('focus', newFocusTime * 60 * 1000);
+        setTimer(timer);
+      }
+    },
+    error: (error) => console.log(error),
+    complete: () => timer.complete(),
+  });
+
+  changeBreakTime$.subscribe({
+    next: (event) => {
+      if (timer.state !== 'RUNNING' && timer.type === 'break') {
+        const newBreakTime = parseInt(event.target.value, 10);
+        timer = new Timer('break', newBreakTime * 60 * 1000);
+        setTimer(timer);
+      }
+    },
+    error: (error) => console.log(error),
+    complete: () => timer.complete(),
+  });
 
   const startTimer$ = interval(1000).pipe(
     map((x) => (timer.time -= 1000)),
@@ -57,15 +87,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
   focusButton.addEventListener('click', () => {
     timer = new Timer('focus', getFocusTime() * 60 * 1000);
     setTimer(timer);
-    enable(buttons);
+    enable([breakButton, startButton]);
     disable(focusButton);
+    disable(stopButton);
   });
 
   breakButton.addEventListener('click', () => {
     timer = new Timer('break', getBreakTime() * 60 * 1000);
     setTimer(timer);
-    enable(buttons);
+    enable([focusButton, startButton]);
     disable(breakButton);
+    disable(stopButton);
   });
 
   function formatInMinutesAndSeconds(timeInMiliseconds) {
