@@ -36,8 +36,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     next: (event) => {
       if (timer.state !== 'RUNNING' && timer.type === 'focus') {
         const newFocusTime = parseInt(event.target.value, 10);
-        timer = new Timer('focus', newFocusTime * 60 * 1000);
-        setTimer(timer);
+        if (newFocusTime) {
+          timer = new Timer('focus', newFocusTime * 60 * 1000);
+          setTimer(timer);
+        }
       }
     },
     error: (error) => console.log(error),
@@ -48,8 +50,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     next: (event) => {
       if (timer.state !== 'RUNNING' && timer.type === 'break') {
         const newBreakTime = parseInt(event.target.value, 10);
-        timer = new Timer('break', newBreakTime * 60 * 1000);
-        setTimer(timer);
+        if (newBreakTime) {
+          timer = new Timer('break', newBreakTime * 60 * 1000);
+          setTimer(timer);
+        }
       }
     },
     error: (error) => console.log(error),
