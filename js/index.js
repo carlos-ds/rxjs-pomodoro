@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   let timer = new Timer('focus', getFocusTime() * 60 * 1000);
   setTimer(timer);
-  disable(stopButton);
+  disable([stopButton]);
 
   changeFocusTime$.subscribe({
     next: (event) => {
@@ -78,41 +78,46 @@ document.addEventListener('DOMContentLoaded', (event) => {
       });
       timer.start();
       enable(buttons);
-      disable(startButton);
+      disable([startButton]);
     }
   });
 
   stopButton.addEventListener('click', () => {
     timer.pause();
     enable(buttons);
-    disable(stopButton);
+    disable([stopButton]);
   });
 
   focusButton.addEventListener('click', () => {
     timer = new Timer('focus', getFocusTime() * 60 * 1000);
     setTimer(timer);
     enable([breakButton, startButton]);
-    disable(focusButton);
-    disable(stopButton);
+    disable([focusButton, stopButton]);
   });
 
   breakButton.addEventListener('click', () => {
     timer = new Timer('break', getBreakTime() * 60 * 1000);
     setTimer(timer);
     enable([focusButton, startButton]);
-    disable(breakButton);
-    disable(stopButton);
+    disable([breakButton, stopButton]);
   });
 
   function formatInMinutesAndSeconds(timeInMiliseconds) {
     // mm:ss format
-    return new Date(timeInMiliseconds).toISOString().substr(14, 5);
+    return new Date(timeInMiliseconds).toISOString().substr(11, 8);
   }
 
   function setTimer(timer) {
     timeRemaining.textContent = formatInMinutesAndSeconds(timer.time);
     document.title = `${timer.type} time - ${formatInMinutesAndSeconds(timer.time)}`;
-    document.querySelector('.header-text').textContent = timer.type.toUpperCase() + ' time';
+    const headerText = document.querySelector('.header-text');
+    if (timer.type === 'focus') {
+      headerText.textContent = 'Time to focus!';
+    } else if (timer.type === 'break') {
+      headerText.textContent = 'Take a break!';
+    } else {
+      headerText.textContent = 'What time is it?';
+    }
   }
 
   function getBreakTime() {
@@ -123,8 +128,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     return parseInt(focusTimeInput.value, 10);
   }
 
-  function disable(button) {
-    button.setAttribute('disabled', '');
+  function disable(buttons) {
+    buttons.forEach((button) => button.setAttribute('disabled', ''));
   }
 
   function enable(buttons) {
