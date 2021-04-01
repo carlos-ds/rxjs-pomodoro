@@ -6,7 +6,7 @@ const DEFAULT_FOCUS_TIME = 25;
 const DEFAULT_BREAK_TIME = 5;
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  const timeRemaining = document.getElementById('timer');
+  const timeRemaining = document.getElementById('time-remaining');
 
   const startButton = document.querySelector('.btn--action-start');
   const stopButton = document.querySelector('.btn--action-stop');
