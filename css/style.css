@@ -15,7 +15,8 @@ body {
   overflow: scroll;
   margin: 0;
   background-color: #ffffff;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1030' height='1030' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23DCEFFA' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1030' height='1030' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23d4f7ff' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E");
+  /* background by SVGBackgrounds.com */
 }
 
 #grid {
@@ -166,16 +167,27 @@ header {
 
 @media only screen and (max-width: 900px) {
   #grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 2fr, 2fr, 1fr, 1fr;
-    gap: 1rem;
+    margin-top: 1rem;
     width: 100%;
+    gap: 1rem;
+  }
+
+  .header-text {
+    font-size: 2rem;
+  }
+
+  .btn {
+    box-shadow: none;
+    transition: none;
+  }
+
+  #timer {
+    font-size: 2.25rem;
   }
 
   #settings input {
     display: block;
-    margin: 2rem auto;
+    margin: 0.5rem auto;
   }
 
   .btn {
