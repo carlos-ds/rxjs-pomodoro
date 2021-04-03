@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     setTimer(timer);
     enable([breakButton, startButton]);
     disable([focusButton, stopButton]);
+    changeBackground();
   });
 
   breakButton.addEventListener('click', () => {
@@ -100,6 +101,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     setTimer(timer);
     enable([focusButton, startButton]);
     disable([breakButton, stopButton]);
+    changeBackground();
   });
 
   function formatInMinutesAndSeconds(timeInMiliseconds) {
@@ -134,5 +136,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   function enable(buttons) {
     buttons.forEach((button) => button.removeAttribute('disabled'));
+  }
+
+  function changeBackground() {
+    document.body.classList.toggle('focus');
+    document.body.classList.toggle('break');
   }
 });

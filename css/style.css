@@ -15,7 +15,15 @@ body {
   overflow: scroll;
   margin: 0;
   background-color: #ffffff;
+}
+
+body.focus {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1030' height='1030' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23d4f7ff' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E");
+  /* background by SVGBackgrounds.com */
+}
+
+body.break {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1030' height='1030' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23f6ff8f' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E");
   /* background by SVGBackgrounds.com */
 }
 
@@ -33,9 +41,9 @@ body {
 }
 
 .btn {
-  width: 60%;
+  width: 40%;
   display: inline-block;
-  padding: 0.4rem 1.6rem;
+  padding: 1rem 1.6rem;
   margin: auto;
   border: 0.2rem solid black;
   box-shadow: 1rem 0;
@@ -143,6 +151,7 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: 3rem;
 }
 
 .btn--action-focus {
