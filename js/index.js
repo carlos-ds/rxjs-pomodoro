@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const breakTab = document.querySelector('.btn--action-break');
   const buttons = [startButton, stopButton];
 
+  const minusButtons = document.querySelectorAll('.number-input-control.minus');
+  const plusButtons = document.querySelectorAll('.number-input-control.plus');
+  increaseStepOnPlusClick();
+  decreaseStepOnMinusClick();
+
   const focusTimeInput = document.querySelector("input[name='focus']");
   const breakTimeInput = document.querySelector("input[name='break']");
   focusTimeInput.value = DEFAULT_FOCUS_TIME;
@@ -122,6 +127,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
           focusTab.classList.toggle('active');
           breakTab.classList.toggle('active');
         }
+      });
+    });
+  }
+
+  function increaseStepOnPlusClick() {
+    plusButtons.forEach((button) => {
+      button.addEventListener('click', function (event) {
+        event.target.parentNode.querySelector('input').stepUp();
+      });
+    });
+  }
+
+  function decreaseStepOnMinusClick() {
+    minusButtons.forEach((button) => {
+      button.addEventListener('click', function (event) {
+        event.target.parentNode.querySelector('input').stepDown();
       });
     });
   }
