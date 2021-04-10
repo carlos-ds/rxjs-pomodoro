@@ -157,6 +157,17 @@ h2 {
   cursor: pointer;
 }
 
+input[type='number'] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
 .accordion-content input:hover {
   outline: none;
   border: 2px solid #e8e9eb;
