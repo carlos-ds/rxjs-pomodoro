@@ -6,22 +6,25 @@ const DEFAULT_FOCUS_TIME = 25;
 const DEFAULT_BREAK_TIME = 5;
 
 document.addEventListener('DOMContentLoaded', (event) => {
+  showAccordionContentOnClick();
+  toggleTabActiveOnClick();
+
   const timeRemaining = document.getElementById('time-remaining');
 
   const startButton = document.querySelector('.btn--action-start');
   const stopButton = document.querySelector('.btn--action-stop');
-  const focusButton = document.querySelector('.btn--action-focus');
-  const breakButton = document.querySelector('.btn--action-break');
-  const buttons = [startButton, stopButton, focusButton, breakButton];
+  const focusTab = document.querySelector('.btn--action-focus');
+  const breakTab = document.querySelector('.btn--action-break');
+  const buttons = [startButton, stopButton];
 
   const focusTimeInput = document.querySelector("input[name='focus']");
   const breakTimeInput = document.querySelector("input[name='break']");
-  focusTimeInput.value = DEFAULT_FOCUS_TIME.toString();
-  breakTimeInput.value = DEFAULT_BREAK_TIME.toString();
+  focusTimeInput.value = DEFAULT_FOCUS_TIME;
+  breakTimeInput.value = DEFAULT_BREAK_TIME;
 
   const clickStop$ = fromEvent(stopButton, 'click');
-  const clickFocus$ = fromEvent(focusButton, 'click');
-  const clickBreak$ = fromEvent(breakButton, 'click');
+  const clickFocus$ = fromEvent(focusTab, 'click');
+  const clickBreak$ = fromEvent(breakTab, 'click');
   const clickStart = fromEvent(startButton, 'click');
   const stopTimer$ = merge(clickBreak$, clickFocus$, clickStop$);
 
@@ -88,38 +91,49 @@ document.addEventListener('DOMContentLoaded', (event) => {
     disable([stopButton]);
   });
 
-  focusButton.addEventListener('click', () => {
+  focusTab.addEventListener('click', () => {
     timer = new Timer('focus', getFocusTime() * 60 * 1000);
     setTimer(timer);
-    enable([breakButton, startButton]);
-    disable([focusButton, stopButton]);
+    enable([startButton]);
+    disable([stopButton]);
     changeBackground('focus');
   });
 
-  breakButton.addEventListener('click', () => {
+  breakTab.addEventListener('click', () => {
     timer = new Timer('break', getBreakTime() * 60 * 1000);
     setTimer(timer);
-    enable([focusButton, startButton]);
-    disable([breakButton, stopButton]);
+    enable([startButton]);
+    disable([stopButton]);
     changeBackground('break');
   });
 
+  function showAccordionContentOnClick() {
+    document.querySelector('.accordion-header').addEventListener('click', function () {
+      this.nextElementSibling.classList.toggle('active');
+    });
+  }
+
+  function toggleTabActiveOnClick() {
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', function (event) {
+        if (event.target.classList.contains('active')) {
+          return;
+        } else {
+          focusTab.classList.toggle('active');
+          breakTab.classList.toggle('active');
+        }
+      });
+    });
+  }
+
   function formatInMinutesAndSeconds(timeInMiliseconds) {
     // mm:ss format
-    return new Date(timeInMiliseconds).toISOString().substr(11, 8);
+    return new Date(timeInMiliseconds).toISOString().substr(14, 5);
   }
 
   function setTimer(timer) {
     timeRemaining.textContent = formatInMinutesAndSeconds(timer.time);
     document.title = `${timer.type} time - ${formatInMinutesAndSeconds(timer.time)}`;
-    const headerText = document.querySelector('.header-text');
-    if (timer.type === 'focus') {
-      headerText.textContent = 'Time to focus!';
-    } else if (timer.type === 'break') {
-      headerText.textContent = 'Take a break!';
-    } else {
-      headerText.textContent = 'What time is it?';
-    }
   }
 
   function getBreakTime() {
