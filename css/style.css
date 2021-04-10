@@ -12,6 +12,10 @@ html {
   font-family: 'Arial';
 }
 
+button {
+  outline: none;
+}
+
 h1,
 h2,
 h3,
@@ -147,10 +151,11 @@ h2 {
   vertical-align: middle;
   font-weight: bold;
   font-size: 2.5rem;
+  line-height: 2.5rem;
   color: var(--black-color);
   border-radius: 20%;
-  height: 2rem;
-  width: 1.8rem;
+  height: 2.5rem;
+  padding: 1rem;
 }
 
 .number-input-control:hover {
@@ -190,7 +195,6 @@ input[type='number']::-webkit-outer-spin-button {
   letter-spacing: 2px;
   font-size: 1rem;
   text-align: center;
-  outline: none;
 }
 
 .tab.active {
