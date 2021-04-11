@@ -33,31 +33,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const clickStart = fromEvent(startButton, 'click');
   const stopTimer$ = merge(clickBreak$, clickFocus$, clickStop$);
 
-  const changeFocusTime$ = fromEvent(focusTimeInput, 'keyup');
-  const changeBreakTime$ = fromEvent(breakTimeInput, 'keyup');
+  const changeSettings$ = merge(fromEvent(focusTimeInput, 'change'), fromEvent(focusTimeInput, 'keyup'), fromEvent(breakTimeInput, 'change'), fromEvent(breakTimeInput, 'keyup'));
 
   let timer = new Timer('focus', getFocusTime() * 60 * 1000);
   setTimer(timer);
   disable([stopButton]);
 
-  changeFocusTime$.subscribe({
-    next: (event) => {
+  changeSettings$.subscribe({
+    next: () => {
       if (timer.state !== 'RUNNING' && timer.type === 'focus') {
-        const newFocusTime = parseInt(event.target.value, 10);
+        const newFocusTime = getFocusTime();
         if (newFocusTime) {
           timer = new Timer('focus', newFocusTime * 60 * 1000);
           setTimer(timer);
         }
       }
-    },
-    error: (error) => console.log(error),
-    complete: () => timer.complete(),
-  });
 
-  changeBreakTime$.subscribe({
-    next: (event) => {
       if (timer.state !== 'RUNNING' && timer.type === 'break') {
-        const newBreakTime = parseInt(event.target.value, 10);
+        const newBreakTime = getBreakTime();
         if (newBreakTime) {
           timer = new Timer('break', newBreakTime * 60 * 1000);
           setTimer(timer);
@@ -134,7 +127,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
   function increaseStepOnPlusClick() {
     plusButtons.forEach((button) => {
       button.addEventListener('click', function (event) {
-        event.target.parentNode.querySelector('input').stepUp();
+        const input = event.target.parentNode.querySelector('input');
+        input.stepUp();
+        input.dispatchEvent(new Event('change'));
       });
     });
   }
@@ -142,7 +137,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
   function decreaseStepOnMinusClick() {
     minusButtons.forEach((button) => {
       button.addEventListener('click', function (event) {
-        event.target.parentNode.querySelector('input').stepDown();
+        const input = event.target.parentNode.querySelector('input');
+        input.stepDown();
+        input.dispatchEvent(new Event('change'));
       });
     });
   }
